@@ -1,0 +1,106 @@
+Id,OwnerUserId,CreationDate,ParentId,Score,Body
+92,61,2008-08-01T14:45:37Z,90,13,"<p><a href=""http://svnbook.red-bean.com/"">Version Control with Subversion</a></p>
+
+<p>A very good resource for source control in general. Not really TortoiseSVN specific, though.</p>"
+124,26,2008-08-01T16:09:47Z,80,12,"<p>I wound up using this. It is a kind of a hack, but it actually works pretty well. The only thing is you have to be very careful with your semicolons. : D</p>
+
+<pre><code>var strSql:String = stream.readUTFBytes(stream.bytesAvailable);
+var i:Number = 0;
+var strSqlSplit:Array = strSql.split("";"");
+for (i = 0; i &lt; strSqlSplit.length; i++){
+    NonQuery(strSqlSplit[i].toString());
+}
+</code></pre>
+"
+199,50,2008-08-01T19:36:46Z,180,1,"<p>I've read somewhere the human eye can't distinguish between less than 4 values apart. so This is something to keep in mind. The following algorithm does not compensate for this.</p>
+
+<p>I'm not sure this is exactly what you want, but this is one way to randomly generate non-repeating color values:</p>
+
+<p>(beware, inconsistent pseudo-code ahead)</p>
+
+<pre><code>//colors entered as 0-255 [R, G, B]<br>colors = []; //holds final colors to be used<br>rand = new Random();<br><br>//assumes n is less than 16,777,216<br>randomGen(int n){<br>   while (len(colors) &lt; n){<br>      //generate a random number between 0,255 for each color<br>      newRed = rand.next(256);<br>      newGreen = rand.next(256);<br>      newBlue = rand.next(256);<br>      temp = [newRed, newGreen, newBlue];<br>      //only adds new colors to the array<br>      if temp not in colors {<br>         colors.append(temp);<br>      }<br>   }<br>}<br></code></pre>
+
+<p>One way you could optimize this for better visibility would be to compare the distance between each new color and all the colors in the array:</p>
+
+<pre><code>for item in color{<br>   itemSq = (item[0]^2 + item[1]^2 + item[2]^2])^(.5);<br>   tempSq = (temp[0]^2 + temp[1]^2 + temp[2]^2])^(.5);<br>   dist = itemSq - tempSq;<br>   dist = abs(dist);<br>}<br>//NUMBER can be your chosen distance apart.<br>if dist &lt; NUMBER and temp not in colors {<br>   colors.append(temp);<br>}<br></code></pre>
+
+<p>But this approach would significantly slow down your algorithm.</p>
+
+<p>Another way would be to scrap the randomness and systematically go through every 4 values and add a color to an array in the above example.</p>"
+269,91,2008-08-01T23:49:57Z,260,4,"<p>Yes, I thought about that, but I soon figured out that another Domain-Specific-Language (DSL) would be a bit too much.</p>
+
+<p>Essentially, they need to interact with my gamestate in possibly unpredictable ways. For example, a card could have a rule ""When this cards enter play, all your undead minions gain +3 attack against flying enemies, except when the enemy is blessed"". As trading card games are turn based, the GameState Manager will fire OnStageX events and let the cards modify other cards or the GameState in whatever way the card needs.</p>
+
+<p>If I try to create a DSL, I have to implement a rather large feature set and possibly constantly update it, which shifts the maintenance work to another part without actually removing it.</p>
+
+<p>That's why I wanted to stay with a ""real"" .NET language to essentially be able to just fire the event and let the card manipulate the gamestate in whatever way (within the limits of the code access security).</p>
+"
+307,49,2008-08-02T01:49:46Z,260,28,"<p><a href=""http://www.codeproject.com/Articles/8656/C-Script-The-Missing-Puzzle-Piece"">Oleg Shilo's C# Script solution (at The Code Project</a>) really is a great introduction to providing script abilities in your application.</p>
+
+<p>A different approach would be to consider a language that is specifically built for scripting, such as <a href=""http://en.wikipedia.org/wiki/IronRuby"">IronRuby</a>, <a href=""http://en.wikipedia.org/wiki/IronPython"">IronPython</a>, or <a href=""http://en.wikipedia.org/wiki/Lua_%28programming_language%29"">Lua</a>.</p>
+
+<p>IronPython and IronRuby are both available today.</p>
+
+<p>For a guide to embedding IronPython read
+<a href=""http://blogs.msdn.com/b/jmstall/archive/2005/09/01/howto-embed-ironpython.aspx"">How to embed IronPython script support in your existing app in 10 easy steps</a>.</p>
+
+<p>Lua is a scripting language commonly used in games. There is a Lua compiler for .NET, available from CodePlex -- <a href=""http://www.codeplex.com/Nua"">http://www.codeplex.com/Nua</a></p>
+
+<p>That codebase is a great read if you want to learn about building a compiler in .NET.</p>
+
+<p>A different angle altogether is to try <a href=""http://en.wikipedia.org/wiki/Windows_PowerShell"">PowerShell</a>. There are numerous examples of embedding PowerShell into an application -- here's a thorough project on the topic:
+<a href=""http://code.msdn.microsoft.com/PowerShellTunnel/Wiki/View.aspx?title=PowerShellTunnel%20Reference"">Powershell Tunnel</a></p>
+"
+332,59,2008-08-02T03:00:24Z,330,19,"<p>I would be a bit reluctant to use nested classes here.  What if you created an abstract base class for a ""multimedia driver"" to handle the back-end stuff (workhorse), and a separate class for the front-end work?  The front-end class could take a pointer/reference to an implemented driver class (for the appropriate media type and situation) and perform the abstract operations on the workhorse structure.</p>
+
+<p>My philosophy would be to go ahead and make both structures accessible to the client in a polished way, just under the assumption they would be used in tandem.</p>
+
+<p>I would reference something like a <a href=""http://qt-project.org/doc/qt-4.8/qtextdocument.html"">QTextDocument</a> in Qt.  You provide a direct interface to the bare metal data handling, but pass the authority along to an object like a QTextEdit to do the manipulation.</p>
+"
+344,100,2008-08-02T04:18:15Z,260,6,"<p>You might be able to use IronRuby for that. </p>
+
+<p>Otherwise I'd suggest you have a directory where you place precompiled assemblies. Then you could have a reference in the DB to the assembly and class, and use reflection to load the proper assemblies at runtime.</p>
+
+<p>If you really want to compile at run-time you could use the CodeDOM, then you could use reflection to load the dynamic assembly. <a href=""http://msdn.microsoft.com/en-us/library/microsoft.csharp.csharpcodeprovider.aspx"">MSDN article which might help</a>.</p>"
+359,119,2008-08-02T06:16:23Z,260,5,"<P>You could use any of the DLR languages, which provide a way to really easily host your own scripting platform. However, you don't have to use a scripting language for this. You could use C# and compile it with the C# code provider. As long as you load it in its own AppDomain, you can load and unload it to your heart's content.</P>"
+473,49,2008-08-02T15:33:13Z,470,8,"<p>No, what you're doing is fine. Don't let those people confuse you.</p>
+
+<p>If you've written the web services with .net then the reference proxies generated by .net are going to be quite suitable. The situation you describe (where you are both producer and consumer) is the ideal situation.</p>
+
+<p>If you need to connect to a web services that is <em>unknown</em> at compile time, then you would want a more dynamic approach, where you deduce the 'shape' of the web service. </p>
+
+<p>But start by using the auto generated proxy class, and don't worry about it until you hit a limitation. And when you do -- come back to stack overflow ;-)</p>"
+529,86,2008-08-02T18:16:07Z,180,3,"<p>Isn't it also a factor which order you set up the colors?</p>
+
+<p>Like if you use Dillie-Os idea you need to mix the colors as much as possible.
+0 64 128 256 is from one to the next. but 0 256 64 128 in a wheel would be more ""apart""</p>
+
+<p>Does this make sense?</p>"
+539,157,2008-08-02T19:03:52Z,180,21,"<p>My first thought on this is ""how generate N vectors in a space that maximize distance from each other."" You can see that the RGB (or any other scale you use that forms a basis in color space) are just vectors. Take a look at <a href=""http://mathworld.wolfram.com/topics/RandomPointPicking.html"">Random Point Picking</a>. Hope this is a good start for you! Once you have a set of vectors that are maximized a part, you can save them in a hash table or something for later, and just perform random rotations on them to get all the colors you desire that are maximally apart from each other!</p>
+
+<p><strong>Edit:</strong> Thinking about this problem more, it would be better to map the colors in a linear manor, possibly (0,0,0) --> (255,255,255) lexicographically, and then distribute them evenly. I really don't know how well this will work, but it should since, lets say:</p>
+
+<p>n = 10
+we know we have 16777216 colors (256^3). We can use <a href=""http://stackoverflow.com/questions/561/using-combinations-of-sets-as-test-data#794"">buckles algorithm 515</a> to find the lexicographically indexed color.<img src=""http://i.stack.imgur.com/gEuCs.gif"" alt=""\frac {\binom {256^3} {3}} {n} * i"">. You'll probably have to edit the algorithm to avoid overflow and probably add some minor speed improvements.</p>
+"
+585,149,2008-08-02T23:40:04Z,580,13,"<p>For my projects I alternate between SQL Compare from REd Gate and the Database Publishing Wizard from Microsoft which you can download free
+<a href=""http://www.microsoft.com/downloads/details.aspx?familyid=56E5B1C5-BF17-42E0-A410-371A838E570A&amp;displaylang=en"">here</a>.</p>
+
+<p>The Wizard isn't as slick as SQL Compare or SQL Data Compare but it does the trick. One issue is that the scripts it generates may need some rearranging and/or editing to flow in one shot.</p>
+
+<p>On the up side, it can move your schema and data which isn't bad for a free tool.</p>"
+586,34,2008-08-02T23:51:09Z,580,17,"<p>I've taken to hand-coding all of my DDL (creates/alter/delete) statements, adding them to my .sln as text files, and using normal versioning (using subversion, but any revision control should work). This way, I not only get the benefit of versioning, but updating live from dev/stage is the same process for code and database - tags, branches and so on work all the same.</p>
+
+<p>Otherwise, I agree redgate is expensive if you don't have a company buying it for you. If you can get a company to buy it for you though, it really is worth it!</p>"
+590,116,2008-08-03T00:22:03Z,580,2,"<p>If you have a company buying it, Toad from Quest Software has this kind of management functionality built in.  It's basically a two-click operation to compare two schemas and generate a sync script from one to the other.</p>
+
+<p>They have editions for most of the popular databases, including of course Sql Server.</p>"
+591,111,2008-08-03T00:37:03Z,580,3,"<p>I work the same way Karl does, by keeping all of my SQL scripts for creating and altering tables in a text file that I keep in source control.  In fact, to avoid the problem of having to have a script examine the live database to determine what ALTERs to run, I usually work like this:</p>
+
+<ul>
+<li>On the first version, I place everything during testing into one SQL script, and treat all tables as a CREATE.  This means I end up dropping and readding tables a lot during testing, but that's not a big deal early into the project (since I'm usually hacking the data I'm using at that point anyway).</li>
+<li>On all subsequent versions, I do two things: I make a new text file to hold the upgrade SQL scripts, that contain just the ALTERs for that version.  And I make the changes to the original, create a fresh database script as well.  This way an upgrade just runs the upgrade script, but if we have to recreate the DB we don't need to run 100 scripts to get there.</li>
+<li>Depending on how I'm deploying the DB changes, I'll also usually put a version table in the DB that holds the version of the DB.  Then, rather than make any human decisions about which scripts to run, whatever code I have running the create/upgrade scripts uses the version to determine what to run.</li>
+</ul>
+
+<p>The one thing this will not do is help if part of what you're moving from test to production is data, but if you want to manage structure and not pay for a nice, but expensive DB management package, is really not very difficult.  I've also found it's a pretty good way of keeping mental track of your DB.</p>"
